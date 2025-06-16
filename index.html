@@ -13,7 +13,7 @@
             <button><img src="image/search.png" alt="search btn"></button>
         </div>  
         <div class="weather">
-            <img src="image/rain.png" alt="weather-icon">
+            <img class="weather-icon" src="image/rain.png" alt="weather-icon">
             <h1 class="temp">22°C </h1>
             <h2 class="City"> New Work</h2>
             <div class="details">
@@ -36,5 +36,49 @@
         </div>  
     </div>
     
+    <script>
+
+        const apiKey="d37ec4c2677eeff537328bf120a9a89b";
+        const apiurl="https://api.openweathermap.org/data/2.5/weather?&units=metric&q="
+
+        const searchBox = document.querySelector(".search input") ; 
+        const searchBtn = document.querySelector(".search button")  ;
+        const weatherIcon = document.querySelector(".weather-icon");
+
+
+        async function checkWeather(city){
+            const response = await fetch(apiurl + city + `&appid=${apiKey}`);
+
+            var data = await response.json();
+
+            console.log(data);
+
+            document.querySelector(".City").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp ) +"°C";
+            document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+            document.querySelector(".wind").innerHTML = data.wind.speed + "km/h";
+
+            if(data.weather[0].main == "Clouds"){
+                weatherIcon.src = "image/clouds.png"
+            }else if(data.weather[0].main=="Clear"){
+                weatherIcon.src ="image/clear.png"
+            }else if(data.weather[0].main=="Rain"){
+                weatherIcon.src ="image/rain.png"
+            }else if(data.weather[0].main=="Drizzle"){
+                weatherIcon.src ="image/drizzle.png"
+            }else if(data.weather[0].main=="Mist"){
+                weatherIcon.src ="image/mist.png"
+            }
+
+            document.querySelector(".weather").style.display =" block"
+        }
+
+        searchBtn.addEventListener("click",()=>{
+            checkWeather(searchBox.value);
+            
+        })
+
+    </script>
+
 </body>
 </html>
